@@ -1,7 +1,15 @@
 import tensorflow as tf
 import os
 from VGG import vgg16 as net
-from scipy.misc import imread, imresize
+import utils
+import matplotlib.pyplot as plt
+
+
+## Constants
+PIC_SIZE = 224
+CHANNELS = 3
+ALPHA = 1
+BETA = 100
 
 ## Paths
 model_path = os.path.join('VGG', 'vgg16_weights.npz')
@@ -11,38 +19,44 @@ paint_path = os.path.join(original_images_path, 'van_gogh.jpg')
 
 
 ## Model
+print("Load VGG model")
 sess = tf.Session()
-imgs = tf.placeholder(tf.float32, [None, 224, 224, 3])
+imgs = tf.placeholder(tf.float32, [None, PIC_SIZE, PIC_SIZE, CHANNELS])
 vgg = net.vgg16(imgs, model_path, sess)
 
 
-## Input images
-img1 = imread(photo_path, mode='RGB')
-img1 = imresize(img1, (224, 224))
-
-img2 = imread(paint_path, mode='RGB')
-img2 = imresize(img1, (224, 224))
+## Images
+photo = utils.read_image(photo_path, PIC_SIZE, PIC_SIZE)
+paint = utils.read_image(paint_path, PIC_SIZE, PIC_SIZE)
+# Create white noise image
+mean = 0
+std = 1
+white_noise = utils.create_white_noise(mean, std, PIC_SIZE, PIC_SIZE)
+# plt.imshow(white_noise)
 
 
 ## Load images into the net
-print("Get content responses")
+print("Get responses")
 responses = [vgg.conv1_1, vgg.conv2_1, vgg.conv3_1, vgg.conv4_1, vgg.conv5_1]
-content_responses = [sess.run(res, feed_dict={vgg.imgs: [img1]}) for res in responses]
-
-print("Get style responses")
-style_responses = [sess.run(res, feed_dict={vgg.imgs: [img2]}) for res in responses]
+content_responses = [sess.run(res, feed_dict={vgg.imgs: [photo]}) for res in responses]
+style_responses = [sess.run(res, feed_dict={vgg.imgs: [paint]}) for res in responses]
+noise_responses = [sess.run(res, feed_dict={vgg.imgs: [white_noise]}) for res in responses]
 
 
 print("Compute Gram Matrix")# TODO: generalize to use any number of layers
-style_gram_matrix = []
-for layer in range(len(style_responses)):
-    # Vectorize response per filter
-    num_filters = style_responses[layer].shape[3]
-    vec_shape = [-1, num_filters]    # [-1] flattens into 1-D.
-    vec_resp = tf.reshape(style_responses[layer], vec_shape)  # vectorize responses (to multiply)
+style_gram_matrix = utils.compute_gram_matrix(sess, style_responses)
+noise_gram_matrix = utils.compute_gram_matrix(sess, noise_responses)
 
-    # Compute Gram Matrix as correlation one layer with itself
-    corr = tf.matmul(tf.transpose(vec_resp), vec_resp)
-    style_gram_matrix.append(sess.run(corr))
+
+## Train
+print("Train")
+
+# Compute content and style loss
+cont_loss = utils.compute_content_loss(sess, content_responses, noise_responses)
+style_loss = utils.compute_style_loss(sess, style_responses, style_gram_matrix, noise_gram_matrix)
+
+
+# Compute total loss (alpha * content_loss + beta * style_loss)
+loss = ALPHA * cont_loss + BETA * style_loss
 
 

@@ -1,1 +1,3 @@
 style_transfer/VGG/vgg16_weights.npz
+*.iml
+*.xml
