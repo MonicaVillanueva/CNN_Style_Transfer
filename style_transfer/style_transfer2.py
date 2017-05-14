@@ -12,12 +12,12 @@ PIC_SIZE = 224
 CHANNELS = 3
 
 # Parameters
-INI_ETA = 2.0
+INI_ETA = 2
 DECAY = 0.95
 STEPS = 100
 NUM_ITERS = 51
 alpha = tf.constant(1.0, name='alpha')
-beta = tf.constant(1000.0, name='beta')
+beta = tf.constant(10000.0, name='beta')
 noisy = False  # Flag for initial image (True = Random noisy Image, False = Content image)
 
 
@@ -102,7 +102,7 @@ L = tf.add(alpha * L_content , beta * L_style, name='L')
 print('Optimizer')
 global_step = tf.Variable(0, trainable=False, name='global_step')
 learning_rate = tf.train.exponential_decay(learning_rate=INI_ETA, global_step=global_step, decay_steps=STEPS,
-                                           decay_rate=DECAY, staircase=False, name='learning_rate')
+                                           decay_rate=DECAY, staircase=True, name='learning_rate')
 train_step = tf.train.AdamOptimizer(learning_rate).minimize(L, global_step=global_step, var_list=[gen_img],
                                                             name='train_step')
 
