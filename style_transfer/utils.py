@@ -1,5 +1,6 @@
 import tensorflow as tf
 from scipy.misc import imread, imresize, imsave
+from datetime import datetime as dt
 import numpy as np
 import os
 import matplotlib.pyplot as plt
@@ -10,26 +11,34 @@ def read_image(path, height, width, sub_mean):
     img = imresize(img, (height, width))
     return img - sub_mean
 
+def save_image(im, iteration, out_dir):
+    img = im.copy()
+    img = np.clip(img, 0, 255).astype(np.uint8) # img[0, ...] ???
+    nowtime = dt.now().strftime('%Y_%m_%d_%H_%M_%S')
+    if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
+    imsave("{}\pneural_art_{}_iteration{}.png".format(out_dir, nowtime, iteration), img)
 
-def save_image(img, mean, epoch, out_path=os.getcwd()):
-    # If dir does not exit
-    if not os.path.exists(out_path):
-        os.makedirs(out_path)
 
-    # Path
-    fname = 'result_epoch', epoch, '.jpg'
-    fname = ''.join(map(str, fname))
-    if out_path != os.getcwd():
-        path = os.path.join(out_path, fname)
-    else:
-        path = fname
-
-    # Image
-    img_save = img + mean
-    # img_save = np.clip(img_save, 0, 255).astype('uint8')
-
-    # Save
-    imsave(path, img_save)
+# def save_image(img, mean, epoch, out_path=os.getcwd()):
+#     # If dir does not exit
+#     if not os.path.exists(out_path):
+#         os.makedirs(out_path)
+#
+#     # Path
+#     fname = 'result_epoch', epoch, '.jpg'
+#     fname = ''.join(map(str, fname))
+#     if out_path != os.getcwd():
+#         path = os.path.join(out_path, fname)
+#     else:
+#         path = fname
+#
+#     # Image
+#     img_save = img + mean
+#     # img_save = np.clip(img_save, 0, 255).astype('uint8')
+#
+#     # Save
+#     imsave(path, img_save)
 
 
 
