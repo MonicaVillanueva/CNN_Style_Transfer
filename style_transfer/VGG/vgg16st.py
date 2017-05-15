@@ -38,7 +38,7 @@ class vgg16:
             setattr(self, layer, result)
 
     def pool_layer(self, layer, previous_response):
-        result = tf.nn.max_pool(previous_response,
+        result = tf.nn.avg_pool(previous_response,
                                         ksize=[1, 2, 2, 1],
                                         strides=[1, 2, 2, 1],
                                         padding='SAME',
