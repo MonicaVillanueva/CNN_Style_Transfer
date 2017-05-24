@@ -1,29 +1,30 @@
 import tensorflow as tf
 import os
 import numpy as np
+from utils import save_image
 from VGG import vgg16st as net
 from scipy.misc import imread, imresize
 
 
 ## Constants
-PIC_SIZE = 224
+PIC_SIZE = 448
 CHANNELS = 3
 
 # Parameters
-INI_ETA = 8.0
+INI_ETA = 10.0
 DECAY = 0.94
 STEPS = 100
-NUM_ITERS = 1000
+NUM_ITERS = 51
 alpha = tf.constant(1.0, name='alpha')
-beta = tf.constant(1000.0, name='beta')
+beta = tf.constant(10000.0, name='beta')
 noisy = False  # Flag for initial image (True = Random noisy Image, False = Content image)
 
 
 ## Paths
 model_path = os.path.join('VGG', 'vgg16_weights.npz')
-original_images_path = os.path.join('Dataset', 'original_input')
-photo_path = os.path.join(original_images_path, 'neckarfront.jpg')
-paint_path = os.path.join(original_images_path, 'van_gogh.jpg')
+original_images_path = os.path.join('Dataset', 'video')
+photo_path = os.path.join(original_images_path, 'cat_012.jpg')
+paint_path = os.path.join(original_images_path, 'klimt.jpg')
 gen_images_path = os.path.join(os.getcwd(), 'gen_images')
 logs_path = os.path.join(os.getcwd(), 'logs')
 
@@ -81,7 +82,9 @@ gen_img_responses = [vgg_aux.conv1_1, vgg_aux.conv2_1, vgg_aux.conv3_1, vgg_aux.
 print('After image')
 for layer in range(len(gen_img_responses)):
     # Content loss
-    L_content += tf.nn.l2_loss(content_responses[layer] - gen_img_responses[layer], name='L_content')
+    if layer == 4:
+        L_content += tf.nn.l2_loss(content_responses[layer] - gen_img_responses[layer], name='L_content')
+
     # Style
     num_filters = style_responses[layer].get_shape().as_list()[3]
     vec_shape = [-1, num_filters]  # [-1] flattens 3D into 2D matrix
@@ -111,13 +114,14 @@ sess.run(tf.global_variables_initializer())
 for i in range(NUM_ITERS):
 
     gen_image_val = sess.run(gen_img)
-    save_image(gen_image_val, i, gen_images_path)
+    if i == 20 or i == 50:
+        save_image(gen_image_val, i, gen_images_path)
     print("L_content, L_style, L_total:", sess.run(L_content), sess.run(L_style), sess.run(L))
     print("Iter:", i)
     sess.run(train_step)
 
 # Write graph
-if not os.path.exists(logs_path):
-    os.mkdir(logs_path)
-writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
+# if not os.path.exists(logs_path):
+#     os.mkdir(logs_path)
+# writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
 
