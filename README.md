@@ -12,12 +12,13 @@ This repository is being developed as part of the course [Deep Learning in Data 
 | Mónica Villanueva | [MonicaVillanueva](https://github.com/MonicaVillanueva)     |
 | Diego Yus | [DYusL](https://github.com/DYusL)       |
 
+Content
+-------
 
-> **Note:**
-
-> - This repo in currently under development.
-> - The **final version** of it will be reached at the begining of **June 2017**.
-
+ - [style_transfer](https://github.com/MonicaVillanueva/CNN_Style_Transfer/tree/master/style_transfer): Code to run in local. It includes the hierarchy of folders to run the program sucessfully (mind the weights in aditional resources). For more information take a look at the readme.md.
+ - [TegnerScripts](https://github.com/MonicaVillanueva/CNN_Style_Transfer/tree/master/TegnerScripts): version of the previous code used to run the program on [PDC](https://www.pdc.kth.se/).
+ - [Reference papers](https://github.com/MonicaVillanueva/CNN_Style_Transfer/tree/master/Reference%20papers): Study of the literature related with the topic. The papers are highlighted and commented.
+ - [Report](https://github.com/MonicaVillanueva/CNN_Style_Transfer/tree/master/Report): Includes the reading version of the overleaf project used and a PDF version of the final report.
 
 ----------
 
@@ -41,11 +42,23 @@ The code will be developed employing **Tensor Flow**, an open library for machin
 Experiments
 -------
  - Replicate the result of the papers using the same painting and same photograph used by them.
- - Replicate the different combinations of content-style influence exhibited in the paper.
- - Apply the style of different paintings to one photograph and check if we can get similar results to the paper.
- - Test if different elements in a photograph (objects, background) are affected in the same way by the application of the painting style.
+ - Replicate the different reconstructions of content and style in different layeres
+ - Replicate the combinations of content-style (alpha/beta ratio) influence exhibited in the paper.
+ - Test the transfer on video.
  
 Evaluation
 -------
 There will not be an exhaustive quantitative evaluation. A qualitative approach will be carried out, comparing the obtained results with their counterparts on the original paper, in order to evaluate the success of the replication process.
+
+----------
+
+Aditional resources
+-------------------
+
+ - The weights for the VGG16 network in tensorflow format have been downloaded from [Davi Frossard's post on VGG](https://www.cs.toronto.edu/~frossard/post/vgg16/). It has not been included in this repo due to GitHub limitations.
+
+> **Note:**
+
+> - This already the **final version** of the repository.
+
 
