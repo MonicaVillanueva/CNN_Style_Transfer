@@ -6,14 +6,28 @@ Results
 -------
 
  1. Examples
+<p align='center'>
+<img src = 'Dataset/original_input/neckarfront.jpg', width=512, height=384 >
+</p>
+<p align='center'>
+<img src = 'Dataset/original_input/turner.jpg', width=400, height=231 >
+<img src = 'gen_images/turner_final.png', width=200, height=200 >
+</p>
+
  2. Videos
 <p align='center'>
-<img src = 'gen_images/kth_b%3D1000/Video.gif' >
-<img src = 'gen_images/video_20it/video_20it.gif' >
-<img src = 'gen_images/video_50it/video_50it.gif' >
+<img src = 'gen_images/kth_b%3D1000/Video.gif', width=200, height=200>
+</p>
+<p align='center'>
+<img src = 'gen_images/video_20it/video_20it.gif', width=200, height=200 >
+<img src = 'gen_images/video_50it/video_50it.gif', width=200, height=200 >
 </p>
 
  3. Reconstructions
+<p align='center'>
+<img src = 'gen_images/reconstructions.png'>
+</p>
+
  4. Ratio alpha/beta
 
 Content
