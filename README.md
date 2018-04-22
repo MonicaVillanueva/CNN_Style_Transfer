@@ -50,15 +50,16 @@ Evaluation
 -------
 There will not be an exhaustive quantitative evaluation. A qualitative approach will be carried out, comparing the obtained results with their counterparts on the original paper, in order to evaluate the success of the replication process.
 
+Results
+------
+Figure showing the original image and the transformed images after the style has been transferred from the different paintings:
+![Fig1](different_styles.PNG "Different styles")
+
 ----------
 
 Aditional resources
 -------------------
 
  - The weights for the VGG16 network in tensorflow format have been downloaded from [Davi Frossard's post on VGG](https://www.cs.toronto.edu/~frossard/post/vgg16/). It has not been included in this repo due to GitHub limitations.
-
-> **Note:**
-
-> - This already the **final version** of the repository.
 
 
